@@ -8,8 +8,20 @@ function gameArea () {
     ctx.fillRect(0,0,1300,610);
 }
 
-//points count
-var howLong = 1;
+//moves, levels and flags count
+var howLong, flags, level, flagsToGet
+
+howLong = 1;
+flags= 0;
+level = 1;
+flagsToGet = 1
+
+//function to display data
+function data() {
+    document.getElementById('score').textContent = howLong;
+    document.getElementById('level').textContent = level;
+    document.getElementById('flags').textContent = flags;
+}
 
 //player position
 var playerPos = {
@@ -48,15 +60,31 @@ function drawPlayer(){
 
 //end position
 var endPos ={
-    x : Math.random()* 1270,
-    y : Math.random() * 580    
+    x : Math.floor(Math.random()* 1240 +30),
+    y : Math.floor(Math.random() * 540 +30)    
 }
 
 //end point figure
-function setEndPosition(){
+function drawEnd(){
     ctx.fillStyle = 'white';
 	ctx.beginPath();
 	ctx.arc(endPos.x,endPos.y, 15, 0,Math.PI*2, true);
+	ctx.fill();
+    //ctx.fillRect(Math.random()*1280,Math.random()*590,30,30);
+}
+
+
+//flag position
+var flagPos ={
+    x : Math.floor(Math.random()* 1240 +30),
+    y : Math.floor(Math.random() * 540 +30)    
+}
+
+//flag figure
+function drawFlag(){
+    ctx.fillStyle = 'yellow';
+	ctx.beginPath();
+	ctx.arc(flagPos.x,flagPos.y, 15, 0,Math.PI*2, true);
 	ctx.fill();
     //ctx.fillRect(Math.random()*1280,Math.random()*590,30,30);
 }
@@ -70,22 +98,62 @@ document.onkeydown = function(e) {
       case 39: playerPos.moveRight(); console.log('right', playerPos); break;
     }
     drawPlayer(playerPos);
-    document.querySelector('.score').textContent = howLong;
   }
 
+// reset positions func
+function resetPositions(){
+    playerPos.x = 10;
+    playerPos.y = 10;
+    endPos.x = Math.floor(Math.random()* 1240 +30);
+    endPos.y = Math.floor(Math.random() * 540 +30);
+}
+
+//intersection
+function intersect(rect1, rect2) {
+    var rect1left = rect1.x
+    var rect1top = rect1.y
+    var rect1right = rect1.x + 20
+    var rect1bottom = rect1.y + 20
+
+    var rect2left = rect2.x
+    var rect2top = rect2.y
+    var rect2right = rect2.x + 30
+    var rect2bottom = rect2.y + 30
+
+    return !(rect1left > rect2right
+      || rect1right < rect2left
+      || rect1top > rect2bottom
+      || rect1bottom < rect2top)
+  }
+
+ //next level 
+function win() {    
+    if (intersect(playerPos,endPos) && flagsToGet === 0) {
+        resetPositions();
+        drawPlayer();
+        drawEnd();
+        level +=1;
+    }
+}
+
+//collect flags
+function onFlag () {
+    if (intersect(playerPos,flagPos)){
+        flagsToGet -= 1
+    }
+}
+
 //game refresh
- function updateScreen () {
-    gameArea();
-    drawPlayer();
-    setEndPosition();
- }
 setInterval(startGame, 30);  
 
 //game start
 function startGame(){
+    win();
     gameArea();
     drawPlayer();
-    setEndPosition();
+    drawEnd();
+    drawFlag();
+    data();
 }
 
 startGame();

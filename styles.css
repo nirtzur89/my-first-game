@@ -3,10 +3,14 @@
     background-color: rgb(39, 83, 167);
 } */
 
-.score {
-    height: 30px;
-    width: 50px;
+.info {
     background-color: black;
     color: aliceblue;
+    text-align: center;
+    height:30px;
+    width: 10%;
+    float: left;
+    position: relative;
+    margin:5px 4%;
     text-align: center;
 }
