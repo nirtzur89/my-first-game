@@ -128,7 +128,7 @@ function intersect(rect1, rect2) {
 
  //next level 
 function win() {    
-    if (intersect(playerPos,endPos) && flagsToGet === 0) {
+    if (intersect(playerPos,endPos) && flagsToGet <= 0) {
         resetPositions();
         drawPlayer();
         drawEnd();
@@ -149,6 +149,7 @@ setInterval(startGame, 30);
 //game start
 function startGame(){
     win();
+    onFlag();
     gameArea();
     drawPlayer();
     drawEnd();
