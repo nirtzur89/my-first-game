@@ -1,8 +1,18 @@
+//canvas def
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d'); 
+
+//game area
+function gameArea () {
+    ctx.fillStyle = 'blue';
+    ctx.fillRect(0,0,1300,610);
+}
+
+//points count
 var howLong = 1;
 
-var player = {
+//player position
+var playerPos = {
     x: 10,
     y: 10,
     moveUp:    function() { 
@@ -30,28 +40,52 @@ var player = {
     },
 }
 
-function draw(player){
-    ctx.fillRect(player.x ,player.y ,20,20);
-}
-function endPosition(){
-    ctx.fillRect(1264,582,20,20);
+//player figure
+function drawPlayer(){
+    ctx.fillStyle = 'black';
+    ctx.fillRect(playerPos.x ,playerPos.y ,20,20);
 }
 
+//end position
+var endPos ={
+    x : Math.random()* 1270,
+    y : Math.random() * 580    
+}
+
+//end point figure
+function setEndPosition(){
+    ctx.fillStyle = 'white';
+	ctx.beginPath();
+	ctx.arc(endPos.x,endPos.y, 15, 0,Math.PI*2, true);
+	ctx.fill();
+    //ctx.fillRect(Math.random()*1280,Math.random()*590,30,30);
+}
+
+//key settings
 document.onkeydown = function(e) {
     switch (e.keyCode) {
-      case 38: player.moveUp();    console.log('up',    player); break;
-      case 40: player.moveDown();  console.log('down',  player); break;
-      case 37: player.moveLeft();  console.log('left',  player); break;
-      case 39: player.moveRight(); console.log('right', player); break;
+      case 38: playerPos.moveUp();    console.log('up',    playerPos); break;
+      case 40: playerPos.moveDown();  console.log('down',  playerPos); break;
+      case 37: playerPos.moveLeft();  console.log('left',  playerPos); break;
+      case 39: playerPos.moveRight(); console.log('right', playerPos); break;
     }
-    draw(player);
+    drawPlayer(playerPos);
     document.querySelector('.score').textContent = howLong;
   }
 
+//game refresh
+ function updateScreen () {
+    gameArea();
+    drawPlayer();
+    setEndPosition();
+ }
+setInterval(startGame, 30);  
 
+//game start
 function startGame(){
-    draw(player);
-    endPosition();
+    gameArea();
+    drawPlayer();
+    setEndPosition();
 }
 
 startGame();
