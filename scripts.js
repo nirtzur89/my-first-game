@@ -106,6 +106,8 @@ function resetPositions(){
     playerPos.y = 10;
     endPos.x = Math.floor(Math.random()* 1240 +30);
     endPos.y = Math.floor(Math.random() * 540 +30);
+    flagPos.x = Math.floor(Math.random()* 1240 +30),
+    flagPos.y = Math.floor(Math.random() * 540 +30) 
 }
 
 //intersection
@@ -127,30 +129,76 @@ function intersect(rect1, rect2) {
   }
 
  //next level 
-function win() {    
+function nextLevel() {    
     if (intersect(playerPos,endPos) && flagsToGet <= 0) {
         resetPositions();
         drawPlayer();
         drawEnd();
         level +=1;
+        flagsToGet = level;
     }
 }
 
 //collect flags
 function onFlag () {
-    if (intersect(playerPos,flagPos)){
+    if (intersect(playerPos,flagPos) && flagsToGet > 0){
         flagsToGet -= 1
+
+
     }
 }
 
+//mines
+var mines = {
+    x : Math.floor(Math.random()* 1240 +30),
+    y : Math.floor(Math.random()* 540 +30),
+    speedX: Math.floor(Math.random()* 10),
+    speedY: Math.floor(Math.random()* 10),
+}
+
+function drawMines() {
+    ctx.fillStyle = 'red';
+	ctx.beginPath();
+	ctx.arc(mines.x,mines.y, 15, 0,Math.PI*2, true);
+	ctx.fill();
+};
+
+function moveMines() {
+	mines.x += mines.speedX;
+    mines.y += mines.speedY;
+
+    if(mines.x < 0) { //left
+		mines.speedX *= -1;
+	}
+	if(mines.x > 1300) { // right
+		mines.speedX *= -1;
+	}
+	if(mines.y < 0) { // top
+		mines.speedY *= -1;
+	}
+	if(mines.y > 610) { // bottom
+		mines.speedY *= -1;
+    }
+drawMines();
+};
+
+    
+
 //game refresh
-setInterval(startGame, 30);  
+function refresh() {
+    nextLevel();
+    onFlag();
+    gameArea();
+    drawPlayer();
+    drawEnd();
+    drawFlag();
+    data();
+    moveMines();   
+}
+
 
 //game start
 function startGame(){
-    win();
-    onFlag();
-    gameArea();
     drawPlayer();
     drawEnd();
     drawFlag();
@@ -158,7 +206,7 @@ function startGame(){
 }
 
 startGame();
-
+setInterval(refresh, 30);  
 
 
 
