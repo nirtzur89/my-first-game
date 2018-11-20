@@ -9,12 +9,13 @@ function gameArea () {
 }
 
 //moves, levels and flags count
-var howLong, flags, level, flagsToGet
+var howLong, flags, level, flagsToGet, lives
 
 howLong = 1;
 flags= 0;
 level = 1;
 flagsToGet = 1
+lives = 3;
 
 //function to display data
 function data() {
@@ -82,6 +83,7 @@ var flagPos ={
 
 //flag figure
 function drawFlag(){
+    if (flagsToGet === 0) return;
     ctx.fillStyle = 'yellow';
 	ctx.beginPath();
 	ctx.arc(flagPos.x,flagPos.y, 15, 0,Math.PI*2, true);
@@ -106,8 +108,14 @@ function resetPositions(){
     playerPos.y = 10;
     endPos.x = Math.floor(Math.random()* 1240 +30);
     endPos.y = Math.floor(Math.random() * 540 +30);
+    /* for (i=1; i<=level; i++){
+            flagPos.x[i] = Math.floor(Math.random()* 1240 +30),
+            flagPos.y[i] = Math.floor(Math.random() * 540 +30)        
+    }
+    */
     flagPos.x = Math.floor(Math.random()* 1240 +30),
-    flagPos.y = Math.floor(Math.random() * 540 +30) 
+    flagPos.y = Math.floor(Math.random() * 540 +30)
+    //mine 
 }
 
 //intersection
@@ -141,8 +149,14 @@ function nextLevel() {
 
 //collect flags
 function onFlag () {
+/*    for (i=1; i<flagsToGet; i++){
+
+}
+
+*/    
     if (intersect(playerPos,flagPos) && flagsToGet > 0){
-        flagsToGet -= 1
+        flagsToGet -= 1;
+        flags += 1;
 
 
     }
@@ -179,10 +193,25 @@ function moveMines() {
 	if(mines.y > 610) { // bottom
 		mines.speedY *= -1;
     }
-drawMines();
+        drawMines();
 };
 
+var mineCount = []
+
+//mine crash
+function mineIntesect() {
+    /*    for (i=1; i<flagsToGet; i++){
     
+    }
+    
+    */    
+        if (!intersect(playerPos,moveMines)){
+            lives -= 1;
+            startGame();
+    
+    
+        }
+    }
 
 //game refresh
 function refresh() {
@@ -193,7 +222,8 @@ function refresh() {
     drawEnd();
     drawFlag();
     data();
-    moveMines();   
+    moveMines();
+    mineIntesect();
 }
 
 
