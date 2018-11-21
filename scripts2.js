@@ -9,19 +9,25 @@ function gameArea () {
 }
 
 //moves, levels and flags count
-var howLong, flags, level, flagsToGet, lives
+var howLong, flags, level, flagsToGet, lives, totalScore, sum
 
 howLong = 1;
 flags= 0;
 level = 1;
 flagsToGet = 1;
 lives = 3;
+sum = 0;
+totalScore = function sum(){
+    sum = (howLong * (flags*1) * level);
+    return sum;
+};
 
 //function to display data
 function data() {
     document.getElementById('score').textContent = howLong;
     document.getElementById('level').textContent = level;
     document.getElementById('flags').textContent = flags;
+    document.getElementById('gameOver').textContent = sum;
 }
 
 //player position
@@ -81,20 +87,59 @@ document.onkeydown = function(e) {
   }
 
 
-//flag position
+//flag object
 var Flag = function flagFigure(x,y,figure) {
     this.x = Math.floor(Math.random()* 1240 +30),
     this.y = Math.floor(Math.random() * 540 +30),
     this.figure = function drawFlag(){
         ctx.fillStyle = 'yellow';
         ctx.beginPath();
-        ctx.arc(this.x,this.y, 15, 0,Math.PI*2, true);
+        ctx.arc(this.x,this.y, 10, 0,Math.PI*2, true);
         ctx.fill();
     }
 };    
 
-//flag settings
-var flagsToShow = [];
+//mine object
+var Mine = function mineFigure(x,y,figure) {
+    this.x = Math.floor(Math.random()* 1240 +30),
+    this.y = Math.floor(Math.random() * 540 +30),
+    this.speedX = Math.floor(Math.random()* 10),
+    this.speedY = Math.floor(Math.random()* 10),
+    this.figure = function drawMine(){
+        ctx.fillStyle = 'red';
+        ctx.beginPath();
+        ctx.arc(this.x,this.y, 10, 0,Math.PI*2, true);
+        ctx.fill();
+    }
+    this.motion = function moveMines() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+    
+        if(this.x < 0) { //left
+            this.speedX *= -1;
+        }
+        if(this.x > 1300) { // right
+            this.speedX *= -1;
+        }
+        if(this.y < 0) { // top
+            this.speedY *= -1;
+        }
+        if(this.y > 610) { // bottom
+            this.speedY *= -1;
+        }
+            this.figure();
+    };
+};
+
+//mine movement
+function mineMove(){
+    for (i=0; i<level; i++){
+        minesOnScreen[i].motion();
+    }
+}
+
+//flag and mine arrays
+var minesOnScreen = [];
 var flagsOnScreen = [];
 
 // reset positions func
@@ -104,7 +149,6 @@ function resetPositions(){
     endPos.x = Math.floor(Math.random()* 1240 +30);
     endPos.y = Math.floor(Math.random() * 540 +30);
     for (i=0; i<=level; i++){
-        flagsToShow[i] = 1;
         flagsOnScreen[i] = new Flag();
         flagsOnScreen[i].figure();
             };
@@ -137,17 +181,15 @@ function nextLevel() {
             endPos.drawEnd();
             level +=1;
             flagsToGet = level;
-            flagsToShow = [];
             for (i=0; i<level; i++){
                 flagsOnScreen[i] = new Flag();
                 flagsOnScreen[i].figure();
+                minesOnScreen[i] = new Mine();
+                minesOnScreen[i].figure();
                     }
         };
     };    
     };
-
-
-
 
 //collect flags
 function onFlag () {
@@ -160,6 +202,20 @@ for (i=0; i<flagsOnScreen.length; i++){
 }
 };
 
+//collect hit mine
+function hitMine () {
+    for (i=0; i<minesOnScreen.length; i++){
+        if (intersect(playerPos,minesOnScreen[i])){
+            lives -= 1
+            if (lives >= 0){
+                startGame();
+            } else { 
+
+            }
+        }           
+    }
+    };
+
 //game refresh
 function refresh() {
     data();
@@ -167,8 +223,9 @@ function refresh() {
     playerPos.figure();
     endPos.drawEnd();
     onFlag();
+    hitMine();
     nextLevel();
-
+    mineMove();
 }
 
 
@@ -180,6 +237,8 @@ function startGame(){
     for (i=0; i<level; i++){
 flagsOnScreen[i] = new Flag();
 flagsOnScreen[i].figure();
+minesOnScreen[i] = new Mine();
+minesOnScreen[i].figure();
     }
 };
 
