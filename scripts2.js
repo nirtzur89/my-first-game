@@ -1,5 +1,5 @@
 //moves, levels and flags count
-var howLong, flags, level, flagsToGet, lives, totalScore, sum, inMotion,
+var howLong, flags, level, flagsToGet, lives, totalScore, sum, inMotion, lastHighScore
 inMotion = false;
 howLong = 1;
 flags= 0;
@@ -7,6 +7,7 @@ level = 1;
 flagsToGet = 1;
 lives = 3;
 sum = 0;
+lastHighScore = 0;
  totalScore = function(){
      sum = Math.round((howLong * (flags*1) * level)/100);
      return sum;
@@ -76,7 +77,7 @@ function data() {
     document.getElementById('score').textContent = "SCORE:  " +sum;
     document.getElementById('level').textContent = "LEVEL:  " + level;
     document.getElementById('flags').textContent ="CHEESE:  " + flags;
-    //document.getElementById('gameOver').textContent = 0;
+    document.getElementById('gameOver').textContent ="HIGH SCORE:  "+ lastHighScore;
 }
 
 //start click
@@ -295,11 +296,12 @@ function hitMine () {
                 playerPos.x = 10;
                 playerPos.y = 10;
                 startGame();
-            } else { 
+            } else {
+                inMotion = false; 
+                if (sum>lastHighScore){
+                    lastHighScore=sum;
+                }
                 restart();
-                //game over
-                //show final score
-                //new game option
             }
         }           
     }
@@ -309,13 +311,15 @@ function hitMine () {
 function refresh() {
     gameArea();
     data();
-    playerPos.figure();
-    endPos.drawEnd();
-    onFlag();
-    hitMine();
-    nextLevel();
-    mineMove();
-    totalScore();
+    if (inMotion){
+        playerPos.figure();
+        endPos.drawEnd();
+        onFlag();
+        hitMine();
+        nextLevel();
+        mineMove();
+        totalScore();
+    }
 }
 
 
@@ -331,6 +335,5 @@ function startGame(){
         minesOnScreen[i].figure();
     }
 };
-
 startGame();
 setInterval(refresh, 30);
