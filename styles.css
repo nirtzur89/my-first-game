@@ -4,9 +4,11 @@
 } */
 
 .info {
-    background-color: black;
-    color: aliceblue;
+    background-color: #095256;
+    color: #86a873;
     text-align: center;
+    font-size: 95%;
+    font-weight: 900;
     height:30px;
     width: 10%;
     float: left;
