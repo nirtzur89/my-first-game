@@ -67,10 +67,10 @@ var endPosPic = new Image();
 endPosPic.src = "./hole.png"
 
 var arraws = new Image();
-arraws.src = "/arraws.png"
+arraws.src = "./arraws.png"
 
 var play = new Image();
-play.src = "/play.png"
+play.src = "./play.png"
 
 //function to display data
 function data() {
