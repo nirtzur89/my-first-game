@@ -1,7 +1,6 @@
-/* #canvas {
-    border: 3px solid rgb(15, 107, 119);
-    background-color: rgb(39, 83, 167);
-} */
+#canvas {
+    border: 3px solid black;
+} 
 
 .info {
     background-color: #095256;
@@ -9,10 +8,21 @@
     text-align: center;
     font-size: 95%;
     font-weight: 900;
-    height:30px;
+    height:50px;
     width: 10%;
     float: left;
     position: relative;
-    margin:-35px 4% 35px 4%;
+    margin:-70px 4% 70px 4%;
+    text-align: center;
+}
+
+.start {
+    background-color: #095256;
+    color: #86a873;
+    text-align: center;
+    font-size: 95%;
+    font-weight: 900;
+    height:30px;
+    width: 10%;
     text-align: center;
 }

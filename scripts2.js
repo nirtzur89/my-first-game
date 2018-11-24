@@ -1,4 +1,25 @@
-//canvas def
+//moves, levels and flags count
+var howLong, flags, level, flagsToGet, lives, totalScore, sum, inMotion,
+inMotion = false;
+howLong = 1;
+flags= 0;
+level = 1;
+flagsToGet = 1;
+lives = 3;
+sum = 0;
+ totalScore = function(){
+     sum = Math.round((howLong * (flags*1) * level)/100);
+     return sum;
+ };
+
+ var startBtn = {
+     x: 600,
+     y: 200,
+     width: 100,
+     height: 100
+ };
+
+ //canvas def
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d'); 
 var playWindow = {
@@ -8,14 +29,23 @@ var playWindow = {
 //game area
 function gameArea () {
     ctx.fillStyle = '#087F8C';
-    ctx.fillRect(0,0,1300,610);
+    ctx.fillRect(0,0,1480,690);
     
     ctx.fillStyle = "#095256";
-    ctx.fillRect(0,560,1300,60);
+    ctx.fillRect(0,560,1480,(690-560));
+    
+    ctx.fillStyle = "#095256";
+    ctx.fillRect(1300,0,(1480-1300),690);
+
+    ctx.drawImage(arraws,1310,20, 165, 140);
+
+    if (!inMotion){
+    ctx.drawImage(play, startBtn.x, startBtn.y, startBtn.width, startBtn.height)
+    }
     
     for (i=0; i<lives; i++){
-        dist = (i + 1) * 60;
-        ctx.drawImage(heartPic,(1050+dist),568,35,35);
+        dist = (i + 1) * 80;
+        ctx.drawImage(heartPic,(1000+dist),600,45,45);
     }
 }
 
@@ -35,29 +65,40 @@ playerPic.src = "./mouse.png"
 var endPosPic = new Image();
 endPosPic.src = "./hole.png"
 
-//moves, levels and flags count
-var howLong, flags, level, flagsToGet, lives, totalScore, sum
+var arraws = new Image();
+arraws.src = "/arraws.png"
 
-howLong = 1;
-flags= 0;
-level = 1;
-flagsToGet = 1;
-lives = 3;
-sum = 0;
- totalScore = function(){
-     sum = Math.round((howLong * (flags*1) * level)/100);
-     return sum;
- };
+var play = new Image();
+play.src = "/play.png"
+
 //function to display data
 function data() {
     document.getElementById('score').textContent = "SCORE:  " +sum;
     document.getElementById('level').textContent = "LEVEL:  " + level;
     document.getElementById('flags').textContent ="CHEESE:  " + flags;
     //document.getElementById('gameOver').textContent = 0;
-    //if (HeartPicLoaded) {
-    //}
-
 }
+
+//start click
+function btnIntersect (btn,mouse){
+    if (mouse.x > btn.x &&
+        mouse.x < (btn.x+btn.width) &&
+        mouse.y > btn.y &&
+        mouse.y < (btn.y + btn.height)){
+            return true;
+        }
+}
+
+canvas.addEventListener('click', (e) => {
+    const pos = {
+      x: e.clientX,
+      y: e.clientY
+    };
+    console.log (pos);
+      if (btnIntersect(startBtn,pos)) {
+        inMotion = true;
+    };
+  });
 
 //player position
 var playerPos = {
@@ -122,10 +163,6 @@ var Flag = function flagFigure(x,y,figure) {
     this.x = Math.floor(Math.random()* (playWindow.width-50)),
     this.y = Math.floor(Math.random() * (playWindow.height-60)),
     this.figure = function drawFlag(){
-        // ctx.fillStyle = 'yellow';
-        // ctx.beginPath();
-        // ctx.arc(this.x,this.y, 10, 0,Math.PI*2, true);
-        // ctx.fill();
         ctx.drawImage(flagPic,this.x,this.y,35,35);
     }
 };    
@@ -137,12 +174,7 @@ var Mine = function mineFigure(x,y,figure) {
     this.speedX = Math.floor(Math.random()* 10),
     this.speedY = Math.floor(Math.random()* 10),
     this.figure = function drawMine(){
-        // ctx.fillStyle = 'red';
-        // ctx.beginPath();
-        // ctx.arc(this.x,this.y, 10, 0,Math.PI*2, true);
-        // ctx.fill();
         ctx.drawImage(minePic,this.x,this.y,40,40);
-        
     }
     this.motion = function moveMines() {
         this.x += this.speedX;
@@ -166,12 +198,11 @@ var Mine = function mineFigure(x,y,figure) {
 
 //mine movement
 function mineMove(){
-    if (minesOnScreen.length > 0){
-        for (i=0; i<level; i++){
-            minesOnScreen[i].motion();
-        }
- }
- 
+        if (minesOnScreen.length > 0){
+            for (i=0; i<level; i++){
+                minesOnScreen[i].motion();
+            }
+    }    
 }
 
 //flag and mine arrays
@@ -290,11 +321,7 @@ function refresh() {
 
 //game start
 function startGame(){
-    // heartPic.onload = function(){
-    //     HeartPicLoaded = true; 
-    //  }
     data();
-    console.log(heartPic);
     playerPos.figure();
     endPos.drawEnd();
     for (i=0; i<level; i++){
@@ -306,4 +333,4 @@ function startGame(){
 };
 
 startGame();
-setInterval(refresh, 30); 
+setInterval(refresh, 30);
