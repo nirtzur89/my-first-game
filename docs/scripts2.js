@@ -39,6 +39,10 @@ function gameArea () {
     ctx.fillRect(1300,0,(1480-1300),690);
 
     ctx.drawImage(arraws,1310,20, 165, 140);
+    ctx.drawImage(flagPic, 375, 570 , 40, 40);
+    ctx.drawImage(levelPic, 110, 570 , 40, 40);
+    ctx.drawImage(scorePic, 640, 570 , 40, 40);
+    ctx.drawImage(HighScorePic, 905, 570 , 40, 40);
 
     if (!inMotion){
     ctx.drawImage(play, startBtn.x, startBtn.y, startBtn.width, startBtn.height)
@@ -53,6 +57,15 @@ function gameArea () {
 //pics settings
 var heartPic = new Image();
 heartPic.src = "./heart.png"
+
+var levelPic = new Image();
+levelPic.src = "./level.png"
+
+var scorePic = new Image();
+scorePic.src = "./highscore.png"
+
+var HighScorePic = new Image();
+HighScorePic.src = "./score.png"
 
 var minePic = new Image();
 minePic.src = "./cat.png"
