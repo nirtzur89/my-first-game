@@ -153,8 +153,8 @@ var playerPos = {
 var endPos ={
     x : Math.floor(Math.random()* (playWindow.width-50)),
     y : Math.floor(Math.random() * (playWindow.height-60)),
-    width : 55,
-    height : 70,
+    width : 70,
+    height : 90,
     drawEnd : function drawEnd(){
         // ctx.fillStyle = 'white';
         // ctx.beginPath();
