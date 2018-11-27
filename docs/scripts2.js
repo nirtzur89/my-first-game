@@ -38,10 +38,10 @@ function gameArea () {
     ctx.fillStyle = "#095256";
     ctx.fillRect(1300,0,(1480-1300),690);
 
-    ctx.drawImage(arraws,1310,20, 165, 140);
-    ctx.drawImage(flagPic, 375, 570 , 40, 40);
+    ctx.drawImage(arraws,1310,20, 165, 160);
+    ctx.drawImage(flagPic, 380, 570 , 40, 40);
     ctx.drawImage(levelPic, 110, 570 , 40, 40);
-    ctx.drawImage(scorePic, 640, 570 , 40, 40);
+    ctx.drawImage(scorePic, 645, 570 , 40, 40);
     ctx.drawImage(HighScorePic, 905, 570 , 40, 40);
 
     if (!inMotion){
@@ -118,6 +118,8 @@ canvas.addEventListener('click', (e) => {
 var playerPos = {
     x: 10,
     y: 10,
+    width: 50,
+    height: 50,
     moveUp:    function() { 
         if (this.y > 20) {
             this.y  -= 22; 
@@ -143,7 +145,7 @@ var playerPos = {
     figure : function drawPlayer(){
         // ctx.fillStyle = 'black';
         // ctx.fillRect(playerPos.x ,playerPos.y ,20,20);
-    ctx.drawImage(playerPic,this.x,this.y,35,35);
+    ctx.drawImage(playerPic,this.x,this.y,this.width,this.height);
     }
 };
 
@@ -151,12 +153,14 @@ var playerPos = {
 var endPos ={
     x : Math.floor(Math.random()* (playWindow.width-50)),
     y : Math.floor(Math.random() * (playWindow.height-60)),
+    width : 55,
+    height : 70,
     drawEnd : function drawEnd(){
         // ctx.fillStyle = 'white';
         // ctx.beginPath();
         // ctx.arc(this.x,this.y, 15, 0,Math.PI*2, true);
         // ctx.fill();
-        ctx.drawImage(endPosPic,this.x,this.y,50,60);
+        ctx.drawImage(endPosPic,this.x,this.y,this.width,this.height);
     }    
 };
 
@@ -176,8 +180,10 @@ document.onkeydown = function(e) {
 var Flag = function flagFigure(x,y,figure) {
     this.x = Math.floor(Math.random()* (playWindow.width-50)),
     this.y = Math.floor(Math.random() * (playWindow.height-60)),
+    this.width = 45,
+    this.height = 45,
     this.figure = function drawFlag(){
-        ctx.drawImage(flagPic,this.x,this.y,35,35);
+        ctx.drawImage(flagPic,this.x,this.y,this.width,this.height);
     }
 };    
 
@@ -185,10 +191,12 @@ var Flag = function flagFigure(x,y,figure) {
 var Mine = function mineFigure(x,y,figure) {
     this.x = Math.floor(Math.random()* (playWindow.width-50)),
     this.y = Math.floor(Math.random() * (playWindow.height-60)),
-    this.speedX = Math.floor(Math.random()* 10),
-    this.speedY = Math.floor(Math.random()* 10),
+    this.speedX = Math.floor((Math.random()* 6)+1),
+    this.speedY = Math.floor((Math.random()* 6)+1),
+    this.height = 50,
+    this.width = 50,
     this.figure = function drawMine(){
-        ctx.drawImage(minePic,this.x,this.y,40,40);
+        ctx.drawImage(minePic,this.x,this.y,this.width, this.height);
     }
     this.motion = function moveMines() {
         this.x += this.speedX;
@@ -239,13 +247,13 @@ function resetPositions(){
 function intersect(rect1, rect2) {
     var rect1left = rect1.x
     var rect1top = rect1.y
-    var rect1right = rect1.x + 20
-    var rect1bottom = rect1.y + 20
+    var rect1right = rect1.x + rect1.width
+    var rect1bottom = rect1.y + rect1.height
 
     var rect2left = rect2.x
     var rect2top = rect2.y
-    var rect2right = rect2.x + 30
-    var rect2bottom = rect2.y + 30
+    var rect2right = rect2.x + rect2.width
+    var rect2bottom = rect2.y + rect2.height
 
     return !(rect1left > rect2right
       || rect1right < rect2left
