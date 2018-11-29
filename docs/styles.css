@@ -1,10 +1,24 @@
 #canvas {
     border: 3px solid black;
-} 
+}
+
+.inst {
+    background-color: #095256;
+    color: #dfdedf;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: 400;
+    height:300px;
+    width: 150px;
+    float: right;
+    position: relative;
+    margin:-500px 10px 50px 10px;
+    text-align: center;    
+}
 
 .info {
     background-color: #095256;
-    color: #86a873;
+    color: #dfdedf;
     text-align: center;
     font-size: 95%;
     font-weight: 900;
@@ -12,7 +26,7 @@
     width: 10%;
     float: left;
     position: relative;
-    margin:-70px 4% 70px 4%;
+    margin:-70px 4% 50px 4%;
     text-align: center;
 }
 

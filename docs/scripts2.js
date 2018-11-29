@@ -1,5 +1,5 @@
 //moves, levels and flags count
-var howLong, flags, level, flagsToGet, lives, totalScore, sum, inMotion, lastHighScore
+var howLong, flags, level, flagsToGet, lives, totalScore, sum, inMotion, lastHighScore, gameOverDis
 inMotion = false;
 howLong = 1;
 flags= 0;
@@ -8,6 +8,7 @@ flagsToGet = 1;
 lives = 3;
 sum = 0;
 lastHighScore = 0;
+gameOverDis = false;
  totalScore = function(){
      sum = Math.round((howLong * (flags*1) * level)/100);
      return sum;
@@ -47,7 +48,10 @@ function gameArea () {
     if (!inMotion){
     ctx.drawImage(play, startBtn.x, startBtn.y, startBtn.width, startBtn.height)
     }
-    
+    if (gameOverDis){
+    ctx.drawImage(gameOver, (startBtn.x-100), (startBtn.y+80), (startBtn.width +200), startBtn.height)
+    }
+
     for (i=0; i<lives; i++){
         dist = (i + 1) * 80;
         ctx.drawImage(heartPic,(1000+dist),600,45,45);
@@ -85,12 +89,16 @@ arraws.src = "./arraws.png"
 var play = new Image();
 play.src = "./play.png"
 
+var gameOver = new Image();
+gameOver.src = "./gameover.png"
+
 //function to display data
 function data() {
-    document.getElementById('score').textContent = "SCORE:  " +sum;
-    document.getElementById('level').textContent = "LEVEL:  " + level;
-    document.getElementById('flags').textContent ="CHEESE:  " + flags;
-    document.getElementById('gameOver').textContent ="HIGH SCORE:  "+ lastHighScore;
+    document.getElementById('score').innerHTML = "SCORE:<br>" +sum;
+    document.getElementById('level').innerHTML = "LEVEL:<br>" + level;
+    document.getElementById('flags').innerHTML ="CHEESE:<br>" + flags;
+    document.getElementById('gameOver').innerHTML ="HIGH SCORE:<br>"+ lastHighScore;
+    document.querySelector(".inst").innerHTML = "MOVE THE<BR>HAMSTER<br><br>TAKE ALL<br>THE CHEESE<BR><br>GO BACK<br>TO THE HOLE<BR><br>DON'T GET<BR>EATEN!!!";
 }
 
 //start click
@@ -111,6 +119,7 @@ canvas.addEventListener('click', (e) => {
     console.log (pos);
       if (btnIntersect(startBtn,pos)) {
         inMotion = true;
+        gameOverDis = false;
     };
   });
 
@@ -318,7 +327,8 @@ function hitMine () {
                 playerPos.y = 10;
                 startGame();
             } else {
-                inMotion = false; 
+                inMotion = false;
+                gameOverDis = true;
                 if (sum>lastHighScore){
                     lastHighScore=sum;
                 }
